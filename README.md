@@ -63,9 +63,6 @@
 ```
 文件与组件命名保持一致，使用 PascalCase，即驼峰命名法，如：CountDown.vue 为一个倒计时组件。
 
-参考链接：
-https://cn.vuejs.org/v2/guide/components-registration.html#%E7%BB%84%E4%BB%B6%E5%90%8D%E5%A4%A7%E5%B0%8F%E5%86%99
-```
 
 页面命名：
 
@@ -142,10 +139,7 @@ store 按页面或者业务划分，然后统一由 store/index.js 输出
 
 布局在 layouts 文件夹中，然后在 App.vue 中引入，放在了路由的最外层，充当整个项目的公共布局，如：页眉、页脚等。
 
-9、参考
 
-[凹凸实验室前端代码规范](https://guide.aotu.io/docs/)
-[风格指南](https://cn.vuejs.org/v2/style-guide/)
 
 ## 常见问题
 
@@ -166,10 +160,9 @@ store 按页面或者业务划分，然后统一由 store/index.js 输出
 3、我要开发移动端H5怎么做？
 
 ```
-1、切换到mobile_template分支，这是为移动端开发专门准备的模版，执行命令：git checkout mobile_template。
-2、查看设计稿的宽度，如750px、375px。
-3、将设计稿宽度/10，然后修改 package.json 中的 postcss-px2rem 下的 remUnit
-4、样式、css等就可以按照设计稿的大小用px来写了
+、查看设计稿的宽度，如750px、375px。
+、将设计稿宽度/10，然后修改 package.json 中的 postcss-px2rem 下的 remUnit
+、样式、css等就可以按照设计稿的大小用px来写了
 
 例子：
 "postcss": {
@@ -214,7 +207,6 @@ CSS loader 会把把非根路径的url解释为相对路径，加~前缀才会�
 
 ```
 src/components/toast/toast.vue 
-修改此文件即可，更多修改可以查找 "vue插件" 资料。
 ```
 
 8、我想在本地和服务端调试怎么弄？
@@ -231,7 +223,7 @@ proxy: 'http://xxx.com'
 有两个方法可以解决这个问题：
 
 方法一：
-在scoped的scss中使用 >>> 或者 /deep/ ，它们是vue提供的"深度作用选择器"，你可以参考 —— https://vue-loader.vuejs.org/zh/guide/scoped-css.html#%E6%B7%B1%E5%BA%A6%E4%BD%9C%E7%94%A8%E9%80%89%E6%8B%A9%E5%99%A8
+在scoped的scss中使用 >>> 或者 /deep/ ，它们是vue提供的"深度作用选择器"，
 <style scoped>
     .a >>> .b { /* ... */ }
     .a /deep/ .b { /* ... */ }
@@ -254,8 +246,6 @@ proxy: 'http://xxx.com'
 @include border-left();
 @include border-right();
 @include border();
-
-同时你也可以传入一些配置项来设置border的颜色、粗细等等，详细的请切换到 mobile_template 分支，查看 src/style/mixin.scss 里面的 border 类。
 ```
 
 11、在数学运算时，出现了1.1999999999这种无限小数位，我该怎么解决啊？
@@ -271,15 +261,13 @@ NP.plus(0.1, 0.2)
 
 ......
 
-更多使用方法参考官方文档：https://github.com/nefe/number-precision
-```
 
 12、前端好多日期展示，每次在methods里面处理好麻烦，我又不想修改原数据，有更方便的办法吗？
 
 ```
-有！你完全不需要每次写方法处理，只需要在需要<template>模版中用 "| 过滤器" 即可！
+<template>模版中用 "| 过滤器" 即可！
 
-因为我们全局混入了过滤器，内置了常用的方法，因此，对待时间戳转日期、隐藏手机号中间四位等要求，我们可以这样做：
+全局混入了过滤器，内置了常用的方法，因此，对待时间戳转日期、隐藏手机号中间四位等要求，我们可以这样做：
 
 时间戳：{{1544179366 | timeFilter}} => 2018-12-07 18:42:46
 手机格式化：{{15311959057 | formatPhone}} => 153****9057
@@ -290,34 +278,9 @@ NP.plus(0.1, 0.2)
 
 看，就是如此方便！向一堆重复方法说Bye Bye吧！
 
-更多使用方法参考官方文档：https://cn.vuejs.org/v2/guide/filters.html
-```
-
-13、我用你这个框架开发微信公众号，在做微信分享的时候wx.config总是不过，一直报"invalid signature"，后端也找不出毛病来，你给我解决解决吧
 
 ```
-vue这样引入sdk
-yarn add weixin-js-sdk
-import wx from 'weixin-js-sdk'
 
-别的先不说，我先给你解决方案：
-1、vue-router用hash模式
-2、wx.config里面的url要动态获取并且encode，直接把这个换上去 encodeURIComponent(location.href.split('#')[0])
-3、wx.config放到页面mounted里面，生命周期放的越前越好
-
-为什么？
-首先，wx.config里面的url必须是动态获取的，不能写死，因为在分享的时候微信会给你在链接里下毒，没毒不让分享。
-其次，url必须和你后台配置的js安全域名一样，本地测试不了你可以放到开发环境测试，实在不行你过来打我。
-最后，微信开发者文档在这里，有不懂的加群问我，群号在最后 https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1421141115
-```
-
-14、为什么我关了node服务，再次yarn serve的时候，端口号就变了，每关一次，端口号就会变一次，调试起来好麻烦呀，能不能让他不变？
-
-```
-如果你是mac电脑，试试用 control + c 来关闭node服务，而不要用 control + z
-
-windows电脑，我不知道
-```
 
 15、我用你这个开发微信公众号，在IOS手机上下滑动的时候，整个页面就被拖着走，这个怎么解决？
 
@@ -352,7 +315,6 @@ import FastClick from 'fastclick';
 FastClick.attach(document.body);
 FastClick.prototype.focus = (ele) => { 'use strict'; ele.focus(); }; //修改focus()方法
 
-参考链接：https://github.com/ftlabs/fastclick/issues/583
 ```
 
 ## 更多自定义配置
